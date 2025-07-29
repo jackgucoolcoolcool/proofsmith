@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proofsmith, LLC - Interactive Investment Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral & Trustworthy Teal -->
+    <!-- Application Structure Plan: The SPA is structured as a narrative journey for a potential investor. It begins with a high-level overview (The Opportunity), drills down into the strategic advantages (The Location), details the tangible use of capital (The Investment) and its direct results (The Impact: Job Creation), explains the operational plan (The Business Model), and concludes with the long-term viability (The Financial Outlook). This top-down, story-driven approach is more intuitive and persuasive for understanding the project's merits than the original report's linear, chapter-based structure. -->
+    <!-- Visualization & Content Choices: 
+        - Market Growth -> Goal: Change -> Bar Chart (Chart.js) -> Justification: Clearly visualizes the significant market expansion from a start to an end point. Complemented by Big Number cards for high-impact stats.
+        - TEA Data -> Goal: Compare -> HTML Table & Big Number Cards -> Justification: The table allows for precise comparison across geographies, while the cards emphasize the most critical indicators of economic distress (poverty, income) for quick comprehension.
+        - Use of Funds -> Goal: Inform/Compare -> Donut Chart (Chart.js) -> Justification: Standard and instantly understandable for showing the proportional allocation of the total investment capital.
+        - Job Creation -> Goal: Organize -> Horizontal Bar Chart (Chart.js) & HTML Timeline -> Justification: The bar chart effectively quantifies the roles being created, while the timeline provides a clear, scannable schedule for the hiring process.
+        - Financials -> Goal: Change -> Combined Bar Chart (Chart.js) -> Justification: Powerfully illustrates the relationship between revenue growth and the initial investment phase (net loss) leading to profitability, telling the complete financial story in one view.
+        - Org Chart -> Goal: Organize -> HTML/CSS Diagram -> Justification: Adheres to the NO SVG/Mermaid constraint while effectively communicating the company's internal structure and reporting lines.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4; /* Warm Neutral Background */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+                max-height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #14B8A6; /* Teal Accent */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="text-2xl font-bold text-gray-900">Proofsmith, LLC</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#opportunity" class="nav-link text-gray-600 font-medium">Opportunity</a>
+                    <a href="#location" class="nav-link text-gray-600 font-medium">Location</a>
+                    <a href="#investment" class="nav-link text-gray-600 font-medium">Investment</a>
+                    <a href="#impact" class="nav-link text-gray-600 font-medium">Impact</a>
+                    <a href="#financials" class="nav-link text-gray-600 font-medium">Financials</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8 mt-8">
+
+        <section id="hero" class="text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">A Credible EB-5 Investment in Digital Trust</h1>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                This interactive overview details the business plan for Proofsmith, LLC, a new commercial enterprise poised for success in the high-growth Trust & Safety market, strategically located in a Targeted Employment Area to maximize community impact and investor value.
+            </p>
+        </section>
+
+        <div class="space-y-16">
+
+            <section id="opportunity" class="scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center mb-2">The Opportunity</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">Proofsmith is entering the rapidly expanding Digital Trust market, a sector experiencing explosive growth due to the rise of user-generated content and increasing regulation. This section outlines the significant market potential the company is positioned to capture.</p>
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+                            <div class="bg-teal-50 p-6 rounded-lg">
+                                <p class="text-4xl font-bold text-teal-600">$97.9B</p>
+                                <p class="text-gray-600 mt-1">Market Size (2024)</p>
+                            </div>
+                            <div class="bg-teal-50 p-6 rounded-lg">
+                                <p class="text-4xl font-bold text-teal-600">$229.1B</p>
+                                <p class="text-gray-600 mt-1">Projected (2032)</p>
+                            </div>
+                            <div class="bg-teal-600 text-white col-span-1 sm:col-span-2 p-6 rounded-lg">
+                                <p class="text-5xl font-bold">11.3%</p>
+                                <p class="opacity-90 mt-1">Compound Annual Growth Rate</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Global Digital Trust Market Growth ($B)</h3>
+                            <div class="chart-container">
+                                <canvas id="marketGrowthChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="location" class="scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center mb-2">The Location Advantage</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">The company's headquarters in Census Tract 501, Pittsburgh, PA, is a strategic decision. This Targeted Employment Area (TEA) not only qualifies the project for the reduced EB-5 investment threshold but also provides access to a motivated talent pool, strengthening the business model.</p>
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2">
+                            <h3 class="text-2xl font-semibold mb-4">Socioeconomic Profile: Census Tract 501 vs. Benchmarks</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="p-3 font-medium">Indicator</th>
+                                            <th class="p-3 font-medium text-teal-600">Census Tract 501</th>
+                                            <th class="p-3 font-medium">City of Pittsburgh</th>
+                                            <th class="p-3 font-medium">Allegheny County</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-3 font-medium">Poverty Rate</td>
+                                            <td class="p-3 font-bold text-teal-600">35%</td>
+                                            <td class="p-3">19.5%</td>
+                                            <td class="p-3">11.2%</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-3 font-medium">Median Household Income</td>
+                                            <td class="p-3 font-bold text-teal-600">$25,938</td>
+                                            <td class="p-3">$43,590</td>
+                                            <td class="p-3">$48,208</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-3 font-medium">Race: Black</td>
+                                            <td class="p-3 font-bold text-teal-600">91%</td>
+                                            <td class="p-3">23%</td>
+                                            <td class="p-3">13.4%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="space-y-4 text-center">
+                             <div class="bg-gray-100 p-4 rounded-lg">
+                                <p class="text-sm text-gray-500">Official Designation</p>
+                                <p class="text-lg font-bold">Low-Income Community Opportunity Zone</p>
+                            </div>
+                             <div class="bg-gray-100 p-4 rounded-lg">
+                                <p class="text-sm text-gray-500">Official Designation</p>
+                                <p class="text-lg font-bold">CDBG Eligible Tract</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="investment" class="scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center mb-2">The Investment</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">The $800,000 in capital from the EB-5 investor is fully at-risk and will be deployed into specific, concrete business activities. This section details the allocation of funds, demonstrating how the investment directly fuels the company's launch and job creation efforts.</p>
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Allocation of EB-5 Capital ($800,000)</h3>
+                            <div class="chart-container">
+                                <canvas id="investmentAllocationChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="text-gray-700">
+                           <p>The investment is strategically allocated to cover all essential startup costs for the first 24-36 months. A significant portion, **50% ($400,000)**, is dedicated to **Personnel Costs**, directly funding the salaries and benefits for the 10 new U.S. jobs. Other key allocations include **Office Lease & Fit-Out (15%)** to establish the physical headquarters, **Technology & Infrastructure (11.9%)** for essential hardware and software, and a **Working Capital & Contingency Reserve (9.4%)** to ensure financial stability during the initial growth phase.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="impact" class="scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center mb-2">The Impact: U.S. Job Creation</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">A core pillar of the EB-5 program is the creation of U.S. jobs. Proofsmith is committed to creating at least 10 full-time, permanent W-2 positions for qualified U.S. workers within two years, providing stable, well-paying employment in a TEA.</p>
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4">2-Year Hiring Plan & Organizational Structure</h3>
+                            <div class="relative pl-8 py-6 border-l-2 border-teal-200">
+                                <div class="mb-8">
+                                    <div class="absolute w-6 h-6 bg-teal-500 rounded-full -left-3 border-4 border-white"></div>
+                                    <p class="font-bold text-teal-600">Year 1, Q1-Q2</p>
+                                    <p class="text-gray-600">Hire 3 foundational roles: Operations Manager, QA Lead, and Business Development Rep.</p>
+                                </div>
+                                <div class="mb-8">
+                                    <div class="absolute w-6 h-6 bg-teal-500 rounded-full -left-3 border-4 border-white"></div>
+                                    <p class="font-bold text-teal-600">Year 1, Q3-Q4</p>
+                                    <p class="text-gray-600">Build the core operational team: Hire a Team Leader and the first 4 Content Reviewers.</p>
+                                </div>
+                                <div>
+                                    <div class="absolute w-6 h-6 bg-teal-500 rounded-full -left-3 border-4 border-white"></div>
+                                    <p class="font-bold text-teal-600">Year 2, Q1</p>
+                                    <p class="text-gray-600">Complete the team by hiring the final 2 Content Reviewers, reaching a total of 10+ employees.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Total Positions Created: 10</h3>
+                            <div class="chart-container">
+                                <canvas id="jobCreationChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="financials" class="scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center mb-2">The Financial Outlook</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">The following conservative five-year financial projections demonstrate the company's path to profitability and long-term sustainability. The initial losses reflect the upfront investment in personnel and infrastructure, leading to strong revenue growth and positive net income by Year 4.</p>
+                 <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-center">5-Year Revenue & Net Income Forecast</h3>
+                    <div class="chart-container h-96 max-h-[500px]">
+                        <canvas id="financialsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto py-8 px-4 text-center">
+            <p>&copy; 2025 Proofsmith, LLC. All Rights Reserved.</p>
+            <p class="text-sm text-gray-400 mt-2">This interactive overview is for informational purposes only and does not constitute an offer to sell securities. All data is derived from the official business plan. Investment decisions should be made only after reviewing the complete set of confidential offering documents.</p>
+        </div>
+    </footer>
+
+    <script>
+        const appColors = {
+            background: '#F8F7F4',
+            text: '#374151',
+            accent: '#14B8A6', // Teal 500
+            accentLight: '#A7F3D0', // Teal 200
+            accentDark: '#047857', // Teal 700
+            white: '#FFFFFF'
+        };
+
+        function processLabels(labels, maxLen = 16) {
+            return labels.map(label => {
+                if (typeof label !== 'string' || label.length <= maxLen) {
+                    return label;
+                }
+                const words = label.split(' ');
+                let currentLine = '';
+                const lines = [];
+                for (const word of words) {
+                    if ((currentLine + ' ' + word).trim().length > maxLen && currentLine.length > 0) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                }
+                if (currentLine) {
+                    lines.push(currentLine.trim());
+                }
+                return lines;
+            });
+        }
+
+        const chartTooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            if (!item) return '';
+                            let label = item.chart.data.labels[item.dataIndex];
+                            return Array.isArray(label) ? label.join(' ') : label;
+                        }
+                    }
+                }
+            }
+        };
+
+        const marketGrowthCtx = document.getElementById('marketGrowthChart');
+        if (marketGrowthCtx) {
+            new Chart(marketGrowthCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2024', '2032 (Projected)'],
+                    datasets: [{
+                        label: 'Market Value (in Billions USD)',
+                        data: [97.9, 229.1],
+                        backgroundColor: [appColors.accentLight, appColors.accent],
+                        borderColor: appColors.accentDark,
+                        borderWidth: 2,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...chartTooltipConfig,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Market Value ($B)' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: { ...chartTooltipConfig.plugins, legend: { display: false } }
+                }
+            });
+        }
+
+        const investmentAllocationCtx = document.getElementById('investmentAllocationChart');
+        if (investmentAllocationCtx) {
+            new Chart(investmentAllocationCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: processLabels(['Personnel Costs', 'Office Lease & Fit-Out', 'Technology & Infra.', 'Marketing & Sales', 'Legal & Pro. Fees', 'Working Capital']),
+                    datasets: [{
+                        data: [400000, 120000, 95000, 60000, 50000, 75000],
+                        backgroundColor: ['#0F766E', '#14B8A6', '#5EEAD4', '#99F6E4', '#CCFBF1', '#FDE68A'],
+                        borderColor: appColors.white,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...chartTooltipConfig,
+                    plugins: {
+                        ...chartTooltipConfig.plugins,
+                        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } },
+                        tooltip: {
+                            ...chartTooltipConfig.plugins.tooltip,
+                            callbacks: {
+                                ...chartTooltipConfig.plugins.tooltip.callbacks,
+                                label: function(context) {
+                                    const total = context.chart.getDataVisibility(0) ? context.chart.getDatasetMeta(0).total : 0;
+                                    const value = context.parsed;
+                                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '0%';
+                                    const formattedValue = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(value);
+                                    return `${formattedValue} (${percentage})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const jobCreationCtx = document.getElementById('jobCreationChart');
+        if (jobCreationCtx) {
+            new Chart(jobCreationCtx, {
+                type: 'bar',
+                data: {
+                    labels: processLabels(['Content Reviewer', 'Team Leader', 'Biz Dev Rep', 'QA Lead', 'Operations Manager']),
+                    datasets: [{
+                        label: 'Number of Positions',
+                        data: [6, 1, 1, 1, 1],
+                        backgroundColor: appColors.accent,
+                        borderColor: appColors.accentDark,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...chartTooltipConfig,
+                    scales: {
+                        x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { display: false } },
+                        y: { grid: { display: false } }
+                    },
+                    plugins: { ...chartTooltipConfig.plugins, legend: { display: false } }
+                }
+            });
+        }
+        
+        const financialsCtx = document.getElementById('financialsChart');
+        if (financialsCtx) {
+            new Chart(financialsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [120000, 450000, 980000, 1650000, 2400000],
+                        backgroundColor: appColors.accent,
+                    }, {
+                        label: 'Net Income / (Loss)',
+                        data: [-499300, -436525, -173094, 178688, 530969],
+                        backgroundColor: '#FBBF24', // Amber 400
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...chartTooltipConfig,
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(value);
+                                }
+                            }
+                        },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        ...chartTooltipConfig.plugins,
+                        legend: { position: 'top' },
+                        tooltip: {
+                            ...chartTooltipConfig.plugins.tooltip,
+                            callbacks: {
+                                ...chartTooltipConfig.plugins.tooltip.callbacks,
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
